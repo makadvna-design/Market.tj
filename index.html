@@ -617,7 +617,7 @@
             <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;" data-i18n="admin_auth_desc">Enter your secret admin passcode to unlock moderator controls.</p>
             <div class="form-group">
                 <label data-i18n="passcode_lbl">Admin Passcode</label>
-                <input type="password" id="admin-secret-input" class="form-control" placeholder="Enter passcode e.g. 2010">
+                <input type="password" id="admin-secret-input" class="form-control" placeholder="Enter secret code">
             </div>
             <button class="btn btn-gold" onclick="verifyAdminPasscode()" data-i18n="unlock_btn">Unlock Admin Panel</button>
             <button class="btn" style="margin-top: 10px; background: #333; color:#fff;" onclick="closeModals()" data-i18n="cancel_btn">Cancel</button>
@@ -630,7 +630,7 @@
             <h3 style="margin-bottom: 18px; color: var(--accent-cyan); font-size: 20px;" data-i18n="login_title">🔒 Registration / Login</h3>
             <div class="form-group">
                 <label data-i18n="reg_name_lbl">Your Full Name</label>
-                <input type="text" id="reg-name" class="form-control" placeholder="Anushervon Kamoldinov">
+                <input type="text" id="reg-name" class="form-control" placeholder="Анушервон Камолдинов">
             </div>
             <div class="form-group">
                 <label data-i18n="reg_phone_lbl">Phone Number</label>
@@ -805,7 +805,10 @@
             const passcode = document.getElementById('admin-secret-input').value;
             const isAnushervon = currentUser && (currentUser.name.toLowerCase().includes('анушервон') || currentUser.name.toLowerCase().includes('anushervon'));
 
-            if (isAnushervon && passcode === '2010') {
+            // Парол бо усули пинҳонӣ (ASCII obfuscation) сохта шудааст, ки дар код бо рақами оддӣ навишта нашудааст
+            const securePass = String.fromCharCode(50, 48, 49, 48);
+
+            if (isAnushervon && passcode === securePass) {
                 isAdminLoggedIn = true;
                 closeModals();
                 document.getElementById('admin-secret-input').value = '';
@@ -853,17 +856,6 @@
             }
         }
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA2owDu-JUvi9-ZQBxqAsugXNEu_QYzvBE",
-  authDomain: "market-tj-d2a39.firebaseapp.com",
-  projectId: "market-tj-d2a39",
-  storageBucket: "market-tj-d2a39.firebasestorage.app",
-  messagingSenderId: "665760312631",
-  appId: "1:665760312631:web:267186187ee621cae2feb2",
-  measurementId: "G-PYY0D0L83S"
-};
-
-        
         function updateUserProfileUI() {
             if (!currentUser) return;
             document.getElementById('header-user-status').innerText = currentUser.name;
@@ -1042,6 +1034,18 @@ const firebaseConfig = {
             });
         }
 
+const firebaseConfig = {
+  apiKey: "AIzaSyA2owDu-JUvi9-ZQBxqAsugXNEu_QYzvBE",
+  authDomain: "market-tj-d2a39.firebaseapp.com",
+  projectId: "market-tj-d2a39",
+  storageBucket: "market-tj-d2a39.firebasestorage.app",
+  messagingSenderId: "665760312631",
+  appId: "1:665760312631:web:267186187ee621cae2feb2",
+  measurementId: "G-PYY0D0L83S"
+};
+
+
+        
         function renderAdminAds() {
             const container = document.getElementById('admin-ads-container');
             if (!container) return;
@@ -1148,7 +1152,7 @@ const firebaseConfig = {
             if (!currentUser || !currentUser.userId) return;
             const myAdsCount = adsList.filter(a => a.userId === currentUser.userId).length;
             document.getElementById('my-ads-count').innerText = myAdsCount;
-            document.getElementById('fav-count').innerText = favorites.length;
+            document.getElementById('fav-count').innerText.innerText = favorites.length;
         }
 
         function clearAppCache() {
